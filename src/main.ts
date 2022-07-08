@@ -109,6 +109,7 @@ async function listener() {
             element.textContent = `#${comment.cid}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${comment.tag ?? ''}\n${comment.text ?? ''}`
         }
     }
+    alert('完成')
     button.classList.remove('pushing')
 }
 input.addEventListener('keydown', async e => {
