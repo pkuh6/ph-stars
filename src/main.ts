@@ -50,7 +50,7 @@ async function getStars(): Promise<HoleData[]> {
     return []
 }
 async function getComments(id: number): Promise<CommentData[]> {
-    await new Promise(r => setTimeout(r, 1000))
+    await new Promise(r => setTimeout(r, 500))
     for (let i = 0; i < 10; i++) {
         const url = new URL('https://pkuhelper.pku.edu.cn/services/pkuhole/api.php')
         url.searchParams.set('action', 'getcomment')
@@ -62,7 +62,7 @@ async function getComments(id: number): Promise<CommentData[]> {
             const res = await fetch(url)
             if (!res.ok) {
                 alert('过于频繁')
-                await new Promise(r => setTimeout(r, 3000))
+                await new Promise(r => setTimeout(r, 1000))
                 continue
             }
             const {code, data} = await res.json()
@@ -70,7 +70,7 @@ async function getComments(id: number): Promise<CommentData[]> {
                 return data
             }
             alert('错误')
-            await new Promise(r => setTimeout(r, 3000))
+            await new Promise(r => setTimeout(r, 1000))
             continue
         } catch (err) {
             console.error(err)
