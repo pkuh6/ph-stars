@@ -4,6 +4,7 @@ const printButton = document.createElement('button')
 const container = document.createElement('div')
 document.body.append('Token', input, button, printButton, container)
 button.textContent = '爬取'
+printButton.textContent = '下载 PDF'
 printButton.addEventListener('click', () => {
     print()
 })
