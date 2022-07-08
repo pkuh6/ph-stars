@@ -2,11 +2,14 @@ const span = document.createElement('span')
 const input = document.createElement('input')
 const button = document.createElement('button')
 const printButton = document.createElement('button')
+const jsonA = document.createElement('a')
 const container = document.createElement('div')
 document.body.append(span, input, button, printButton, container)
 span.textContent = 'Token'
 button.textContent = '爬取'
 printButton.textContent = '下载 PDF'
+jsonA.textContent = '下载 JSON'
+jsonA.download = 'hole.json'
 printButton.addEventListener('click', () => {
     print()
 })
@@ -91,10 +94,14 @@ async function listener() {
     }
     button.classList.add('pushing')
     container.innerHTML = ''
+    const array: {
+        hole: HoleData
+        comments: CommentData[]
+    }[] = []
     for (const hole of await getStars()) {
         const element = document.createElement('div')
         const main = document.createElement('div')
-        const comments = document.createElement('div')
+        const commentsEle = document.createElement('div')
         container.append(element)
         element.append(main)
         const id = Number(hole.pid)
@@ -109,14 +116,20 @@ async function listener() {
                 img.src = `https://ewr1.vultrobjects.com/ph-static/images/${hole.url}`
             }
         }
-        element.append(comments)
-        for (const comment of await getComments(id)) {
+        element.append(commentsEle)
+        const comments = await getComments(id)
+        for (const comment of comments) {
             const element = document.createElement('div')
-            comments.append(element)
+            commentsEle.append(element)
             const date = new Date(Number(comment.timestamp) * 1000)
             element.textContent = `#${comment.cid}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${comment.tag ?? ''}\n${comment.text ?? ''}`
         }
+        array.push({
+            hole,
+            comments
+        })
     }
+    jsonA.href = URL.createObjectURL(new Blob([JSON.stringify(array, undefined, 4)]))
     alert('完成')
     button.classList.remove('pushing')
 }
