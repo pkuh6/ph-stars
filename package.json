@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "build": "esbuild --bundle --format=esm --legal-comments=external --minify --outfile=main.js --target=es6 src/main.ts"
+  }
+}
