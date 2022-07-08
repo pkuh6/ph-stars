@@ -50,23 +50,31 @@ async function getStars(): Promise<HoleData[]> {
     return []
 }
 async function getComments(id: number): Promise<CommentData[]> {
-    const url = new URL('https://pkuhelper.pku.edu.cn/services/pkuhole/api.php')
-    url.searchParams.set('action', 'getcomment')
-    url.searchParams.set('pid', id.toString())
-    url.searchParams.set('PKUHelperAPI', '3.0')
-    url.searchParams.set('jsapiver', `201027113050-${2 * Math.floor(Date.now() / 72e5)}`)
-    url.searchParams.set('user_token', input.value)
-    try {
-        const res = await fetch(url)
-        if (!res.ok) {
-            return []
+    await new Promise(r => setTimeout(r, 1000))
+    for (let i = 0; i < 10; i++) {
+        const url = new URL('https://pkuhelper.pku.edu.cn/services/pkuhole/api.php')
+        url.searchParams.set('action', 'getcomment')
+        url.searchParams.set('pid', id.toString())
+        url.searchParams.set('PKUHelperAPI', '3.0')
+        url.searchParams.set('jsapiver', `201027113050-${2 * Math.floor(Date.now() / 72e5)}`)
+        url.searchParams.set('user_token', input.value)
+        try {
+            const res = await fetch(url)
+            if (!res.ok) {
+                alert('过于频繁')
+                await new Promise(r => setTimeout(r, 3000))
+                continue
+            }
+            const {code, data} = await res.json()
+            if (code === 0) {
+                return data
+            }
+            alert('错误')
+            await new Promise(r => setTimeout(r, 3000))
+            continue
+        } catch (err) {
+            console.error(err)
         }
-        const {code, data} = await res.json()
-        if (code === 0) {
-            return data
-        }
-    } catch (err) {
-        console.error(err)
     }
     return []
 }
@@ -94,7 +102,6 @@ async function listener() {
             }
         }
         element.append(comments)
-        await new Promise(r => setTimeout(r, 1000))
         for (const comment of await getComments(id)) {
             const element = document.createElement('div')
             comments.append(element)
