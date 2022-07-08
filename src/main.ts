@@ -1,8 +1,10 @@
+const span = document.createElement('span')
 const input = document.createElement('input')
 const button = document.createElement('button')
 const printButton = document.createElement('button')
 const container = document.createElement('div')
-document.body.append('Token', input, button, printButton, container)
+document.body.append(span, input, button, printButton, container)
+span.textContent = 'Token'
 button.textContent = '爬取'
 printButton.textContent = '下载 PDF'
 printButton.addEventListener('click', () => {
