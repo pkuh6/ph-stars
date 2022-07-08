@@ -64,6 +64,10 @@ async function getComments(id: number): Promise<CommentData[]> {
     return []
 }
 async function listener() {
+    if (button.classList.contains('pushing')) {
+        return
+    }
+    button.classList.add('pushing')
     for (const hole of await getStars()) {
         const element = document.createElement('div')
         const main = document.createElement('div')
@@ -90,6 +94,7 @@ async function listener() {
             element.textContent = `#${comment.cid}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${comment.tag ?? ''}\n${comment.text ?? ''}`
         }
     }
+    button.classList.remove('pushing')
 }
 input.addEventListener('keydown', async e => {
     if (e.key === 'Enter') {

@@ -1,9 +1,6 @@
-body>div {
-    margin: 1em 0;
-}
-
 body>div>div {
     border-bottom: 1px solid;
+    padding: 1em 0;
 }
 
 body>div>div>:last-child {
@@ -12,5 +9,5 @@ body>div>div>:last-child {
 
 body>div>div>:last-child>div {
     border-top: 1px solid;
-    margin: .5em 0;
+    padding: .5em 0;
 }
