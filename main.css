@@ -1,5 +1,6 @@
 body>input,
-body>button {
+body>button,
+body>a {
     display: inline-block;
     margin-left: .5em;
 }

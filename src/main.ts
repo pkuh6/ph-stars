@@ -4,7 +4,7 @@ const button = document.createElement('button')
 const printButton = document.createElement('button')
 const jsonA = document.createElement('a')
 const container = document.createElement('div')
-document.body.append(span, input, button, printButton, container)
+document.body.append(span, input, button, printButton, jsonA, container)
 span.textContent = 'Token'
 button.textContent = '爬取'
 printButton.textContent = '下载 PDF'
