@@ -73,7 +73,7 @@ async function listener() {
         const main = document.createElement('div')
         const comments = document.createElement('div')
         container.append(element)
-        element.append(main, comments)
+        element.append(main)
         const id = Number(hole.pid)
         const date = new Date(Number(hole.timestamp) * 1000)
         main.textContent = `#${id}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${hole.likenum} 收藏  ${hole.reply} 回复  ${hole.tag ?? ''}\n${hole.text ?? ''}`
@@ -86,6 +86,7 @@ async function listener() {
                 img.src = `https://ewr1.vultrobjects.com/ph-static/images/${hole.url}`
             }
         }
+        element.append(comments)
         await new Promise(r => setTimeout(r, 1000))
         for (const comment of await getComments(id)) {
             const element = document.createElement('div')
