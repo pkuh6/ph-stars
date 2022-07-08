@@ -83,6 +83,7 @@ async function listener() {
         return
     }
     button.classList.add('pushing')
+    container.innerHTML = ''
     for (const hole of await getStars()) {
         const element = document.createElement('div')
         const main = document.createElement('div')
