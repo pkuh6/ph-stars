@@ -1,8 +1,12 @@
 const input = document.createElement('input')
 const button = document.createElement('button')
+const printButton = document.createElement('button')
 const container = document.createElement('div')
-document.body.append('Token', input, button, container)
+document.body.append('Token', input, button, printButton, container)
 button.textContent = '爬取'
+printButton.addEventListener('click', () => {
+    print()
+})
 export interface HoleData {
     hidden: '1' | '0' | 1 | 0 | boolean | undefined
     likenum: number | string
