@@ -49,7 +49,7 @@ async function getStars(): Promise<HoleData[]> {
     }
     return []
 }
-async function getComments(id: number): Promise<CommentData[]> {
+async function getRoughComments(id: number): Promise<CommentData[]> {
     await new Promise(r => setTimeout(r, 500))
     for (let i = 0; i < 10; i++) {
         const url = new URL('https://pkuhelper.pku.edu.cn/services/pkuhole/api.php')
@@ -77,6 +77,13 @@ async function getComments(id: number): Promise<CommentData[]> {
         }
     }
     return []
+}
+async function getComments(id: number) {
+    const comments = await getRoughComments(id)
+    if (comments.length > 1 && Number(comments[0].cid) > Number(comments[1].cid)) {
+        comments.reverse()
+    }
+    return comments
 }
 async function listener() {
     if (button.classList.contains('pushing')) {
