@@ -85,7 +85,7 @@ async function listener() {
         await new Promise(r => setTimeout(r, 1000))
         for (const comment of await getComments(id)) {
             const element = document.createElement('div')
-            main.append(element)
+            comments.append(element)
             const date = new Date(Number(comment.timestamp) * 1000)
             element.textContent = `#${comment.cid}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${comment.tag ?? ''}\n${comment.text ?? ''}`
         }
