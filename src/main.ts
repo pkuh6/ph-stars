@@ -17,9 +17,9 @@ const printButton = createElement('button', '下载 PDF')
 const jsonA = createElement('a', '下载 JSON')
 const container = createElement('div')
 document.body.append(
-    createElement('span', '开始日期'), startInput, '\n',
-    createElement('span', '结束日期'), endInput, '\n',
-    createElement('span', 'Token'), input, '\n',
+    createElement('span', '开始日期'), startInput,
+    createElement('span', '结束日期'), endInput,
+    createElement('span', 'Token'), input,
     button, printButton, jsonA,
     container
 )
