@@ -1,14 +1,30 @@
-const span = document.createElement('span')
-const input = document.createElement('input')
-const button = document.createElement('button')
-const printButton = document.createElement('button')
-const jsonA = document.createElement('a')
-const container = document.createElement('div')
-document.body.append(span, input, button, printButton, jsonA, container)
-span.textContent = 'Token'
-button.textContent = '爬取'
-printButton.textContent = '下载 PDF'
-jsonA.textContent = '下载 JSON'
+function createElement<T extends keyof HTMLElementTagNameMap>(tag: T, ...children: (string | Node)[]) {
+    const element = document.createElement(tag)
+    element.append(...children)
+    return element
+}
+function createDiv(classes: string[] = [], ...children: (string | Node)[]) {
+    const element = createElement('div')
+    element.classList.add(...classes)
+    element.append(...children)
+    return element
+}
+const startInput = createElement('input')
+const endInput = createElement('input')
+const input = createElement('input')
+const button = createElement('button', '爬取')
+const printButton = createElement('button', '下载 PDF')
+const jsonA = createElement('a', '下载 JSON')
+const container = createElement('div')
+document.body.append(
+    createElement('span', '开始日期'), startInput, '\n',
+    createElement('span', '结束日期'), endInput, '\n',
+    createElement('span', 'Token'), input, '\n',
+    button, printButton, jsonA,
+    container
+)
+startInput.type = 'date'
+endInput.type = 'date'
 jsonA.download = 'hole.json'
 printButton.addEventListener('click', () => {
     print()
@@ -93,22 +109,38 @@ async function listener() {
         return
     }
     button.classList.add('pushing')
+    let end: number
+    const {value: endValue} = endInput
+    if (endValue.length === 0) {
+        end = Math.ceil((Date.now() / 1000 + 28800) / 86400) * 86400 - 28800
+    } else {
+        end = Math.floor(new Date(`${endValue} 23:59:59`).getTime() / 1000) + 1
+    }
+    let start = end - 86400
+    const {value: startValue} = startInput
+    if (startValue.length > 0) {
+        start = Math.min(start, Math.floor(new Date(`${startValue} `).getTime() / 1000))
+    }
     container.innerHTML = ''
     const array: {
         hole: HoleData
         comments: CommentData[]
     }[] = []
     for (const hole of await getStars()) {
-        const element = document.createElement('div')
-        const main = document.createElement('div')
-        const commentsEle = document.createElement('div')
+        const time = Number(hole.timestamp)
+        if (time < start || time > end) {
+            continue
+        }
+        const element = createElement('div')
+        const main = createElement('div')
+        const commentsEle = createElement('div')
         container.append(element)
         element.append(main)
         const id = Number(hole.pid)
-        const date = new Date(Number(hole.timestamp) * 1000)
+        const date = new Date(time * 1000)
         main.textContent = `#${id}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${hole.likenum} 收藏  ${hole.reply} 回复  ${hole.tag ?? ''}\n${hole.text ?? ''}`
         if (hole.type === 'image' && typeof hole.url === 'string') {
-            const img = document.createElement('img')
+            const img = createElement('img')
             element.append(img)
             if (id > 3218523) {
                 img.src = `https://pkuhelper.pku.edu.cn/services/pkuhole/images/${hole.url}`
@@ -119,7 +151,7 @@ async function listener() {
         element.append(commentsEle)
         const comments = await getComments(id)
         for (const comment of comments) {
-            const element = document.createElement('div')
+            const element = createElement('div')
             commentsEle.append(element)
             const date = new Date(Number(comment.timestamp) * 1000)
             element.textContent = `#${comment.cid}  ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}  ${comment.tag ?? ''}\n${comment.text ?? ''}`
