@@ -166,23 +166,42 @@ async function listener() {
             comments
         })
     }
-    const style = document.querySelector('style')
-    if (style !== null) {
-        htmlA.href = URL.createObjectURL(new Blob([`<!DOCTYPE html>
-        <html>
-        
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        
-        <body>
-            <style>${style.innerHTML}</style>
-            <div>${container.innerHTML}</div>
-        </body>
-        
-        </html>`]))
-    }
+    htmlA.href = URL.createObjectURL(new Blob([`<!DOCTYPE html>
+    <html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    
+    <body>
+        <style>
+            body>div>div {
+                border-bottom: 1px solid;
+                padding-top: 1em;
+                white-space: pre-wrap;
+            }
+            
+            body>div>div>:last-child {
+                padding: .5em 0;
+                margin-left: 2em;
+            }
+            
+            body>div>div>:last-child>div {
+                border-top: 1px solid;
+                padding: .5em 0;
+            }
+            
+            img {
+                display: block;
+                margin-top: .5em;
+                max-width: 100%;
+            }
+        </style>
+        <div>${container.innerHTML}</div>
+    </body>
+    
+    </html>`]))
     jsonA.href = URL.createObjectURL(new Blob([JSON.stringify(array, undefined, 4)]))
     alert('完成')
     button.classList.remove('pushing')
