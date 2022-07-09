@@ -1,5 +1,4 @@
 body>:not(div) {
-    display: inline-block;
     margin-right: .5em;
 }
 
