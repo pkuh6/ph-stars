@@ -160,6 +160,7 @@ async function listener() {
             comments
         })
     }
+    URL.revokeObjectURL(jsonA.href)
     jsonA.href = URL.createObjectURL(new Blob([JSON.stringify(array, undefined, 4)]))
     alert('完成')
     button.classList.remove('pushing')
