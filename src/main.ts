@@ -14,17 +14,19 @@ const endInput = createElement('input')
 const input = createElement('input')
 const button = createElement('button', '爬取')
 const printButton = createElement('button', '下载 PDF')
+const htmlA = createElement('a', '下载 HTML')
 const jsonA = createElement('a', '下载 JSON')
 const container = createElement('div')
 document.body.append(
     createElement('span', '开始日期'), startInput,
     createElement('span', '结束日期'), endInput,
     createElement('span', 'Token'), input,
-    button, printButton, jsonA,
+    button, printButton, htmlA, jsonA,
     container
 )
 startInput.type = 'date'
 endInput.type = 'date'
+htmlA.download = 'hole.html'
 jsonA.download = 'hole.json'
 printButton.addEventListener('click', () => {
     print()
@@ -108,6 +110,11 @@ async function listener() {
         return
     }
     button.classList.add('pushing')
+    URL.revokeObjectURL(htmlA.href)
+    htmlA.href = ''
+    URL.revokeObjectURL(jsonA.href)
+    jsonA.href = ''
+    container.innerHTML = ''
     let end: number
     const {value: endValue} = endInput
     if (endValue.length === 0) {
@@ -120,7 +127,6 @@ async function listener() {
     if (startValue.length > 0) {
         start = Math.min(start, Math.floor(new Date(`${startValue} `).getTime() / 1000))
     }
-    container.innerHTML = ''
     const array: {
         hole: HoleData
         comments: CommentData[]
@@ -160,7 +166,23 @@ async function listener() {
             comments
         })
     }
-    URL.revokeObjectURL(jsonA.href)
+    const style = document.querySelector('style')
+    if (style !== null) {
+        htmlA.href = URL.createObjectURL(new Blob([`<!DOCTYPE html>
+        <html>
+        
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        
+        <body>
+            <style>${style.innerHTML}</style>
+            <div>${container.innerHTML}</div>
+        </body>
+        
+        </html>`]))
+    }
     jsonA.href = URL.createObjectURL(new Blob([JSON.stringify(array, undefined, 4)]))
     alert('完成')
     button.classList.remove('pushing')
